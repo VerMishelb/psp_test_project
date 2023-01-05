@@ -4,14 +4,9 @@
 #include <malloc.h>
 
 #define STB_IMAGE_IMPLEMENTATION
+#include "../include/Debug.h"
 #include "../include/stb_image.h"
 #include "../include/Common.h"
-
-/**
- * Temporary replacement for proper error handling in order to at least know
- * where exactly everything went wrong
-*/
-#define SCREWUP printf("Died at line: %d\n", __LINE__)
 
 // Display-list
 static unsigned int __attribute__((aligned(64))) list[0x40000];
@@ -64,6 +59,7 @@ namespace Gu {
     }
 
     void init() {
+        VME_PRINT("Initialising Gu and Input\n");
         // fbp stands for "frame buffer pointer", zbp - depth buffer pointer
         void* fbp0 = getStaticVramBuffer(BUFFER_WIDTH, SCREEN_HEIGHT, GU_PSM_8888);
         void* fbp1 = getStaticVramBuffer(BUFFER_WIDTH, SCREEN_HEIGHT, GU_PSM_8888);
@@ -169,13 +165,13 @@ namespace Gu {
             filename, &width, &height, &nrChannels, STBI_rgb_alpha);
 
         if (!data) {
-            SCREWUP;
+            DBG_ERROR("Could not allocate image data\n");
             return NULL;
         }
 
         Texture* tex = (Texture*) malloc(sizeof(Texture));
         if (tex == NULL) {
-            SCREWUP;
+            DBG_ERROR("Could not allocate Texture struct\n");
             return NULL;
         }
 
@@ -189,7 +185,7 @@ namespace Gu {
         unsigned int *dataBuffer = (unsigned int *) memalign(16, size);
         if (dataBuffer == NULL) {
             free(tex);
-            SCREWUP;
+            DBG_ERROR("Could not allocate dataBuffer\n");
             return NULL;
         }
 
@@ -206,7 +202,7 @@ namespace Gu {
         if (swizzled_pixels == NULL) {
             free(dataBuffer);
             free(tex);
-            SCREWUP;
+            DBG_ERROR("Could not allocate swizzled_pixels\n");
             return NULL;
         }
 
@@ -222,7 +218,7 @@ namespace Gu {
 
     void bindTexture(Texture *tex) {
         if (!tex) {
-            SCREWUP;
+            DBG_ERROR("Could not allocate Texture struct\n");
             return;
         }
         
@@ -265,19 +261,19 @@ namespace Gu {
     Mesh* createMesh(u32 vertex_count, u32 index_count) {
         Mesh* mesh = (Mesh *) malloc(sizeof(Mesh));
         if (mesh == 0) {
-            printf("Could not allocate memory for a mesh\n");
+            DBG_ERROR("Could not allocate mesh\n");
             return 0;
         }
 
         mesh->data = memalign(16, sizeof(Vertex) * vertex_count);
         if (mesh->data == 0) {
-            printf("Could not allocate memory for mesh->data\n");
+            DBG_ERROR("Could not allocate mesh->data\n");
             free(mesh);
             return 0;
         }
         mesh->indices = (u16 *) memalign(16, sizeof(u16) * index_count);
         if (mesh->indices == 0) {
-            printf("Could not allocate memory for mesh->indices\n");
+            DBG_ERROR("Could not allocate mesh->indices\n");
             free(mesh->data);
             free(mesh);
             return 0;
@@ -317,14 +313,14 @@ namespace Gu {
     Sprite* createSprite(float x, float y, float sx, float sy, Texture* tex) {
         Sprite* sprite = (Sprite *) malloc(sizeof(Sprite));
         if (sprite == 0) {
-            printf("Could not allocate memory for a sprite\n");
+            DBG_ERROR("Could not allocate sprite\n");
             return 0;
         }
 
         sprite->mesh = createMesh(4, 6);
         if (sprite->mesh == 0) {
             free(sprite);
-            printf("Could not create a mesh\n");
+            DBG_ERROR("Could not create mesh\n");
             return 0;
         }
 
@@ -389,7 +385,7 @@ namespace Gu {
 
     void getUvIndex(TextureAtlas* atlas, float* buf, int idx) {
         if (buf == 0) {
-            SCREWUP;
+            DBG_ERROR("buf is NULL\n");
             return;
         }
 
@@ -443,18 +439,18 @@ namespace Gu {
     {
         Tilemap* tilemap = (Tilemap*) malloc(sizeof(Tilemap));
         if (tilemap == 0) {
-            SCREWUP;
+            DBG_ERROR("Could not allocate tilemap\n");
             return 0;
         }
         tilemap->tiles = (Tile*) malloc(sizeof(Tile) * columns * rows);
         if (tilemap->tiles == 0) {
-            SCREWUP;
+            DBG_ERROR("Could not allocate tiles\n");
             free(tilemap);
             return 0;
         }
         tilemap->mesh = createMesh(columns * rows * 4, columns * rows * 6);
         if (tilemap->mesh == 0) {
-            SCREWUP;
+            DBG_ERROR("Could not create mesh");
             free(tilemap->tiles);
             free(tilemap);
             return 0;
@@ -470,7 +466,7 @@ namespace Gu {
         tilemap->scale_y = 16.f;
         tilemap->columns = columns;
         tilemap->rows = rows;
-        
+
         tilemap->atlas = atlas;
         tilemap->texture = texture;
         tilemap->mesh->index_count = tilemap->columns * tilemap->rows * 6;

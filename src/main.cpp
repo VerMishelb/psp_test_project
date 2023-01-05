@@ -5,6 +5,7 @@
 #include "../include/Callbacks.h"
 #include "../include/Gu.h"
 #include "../include/Input.h"
+#include "../include/Debug.h"
 
 #include <math.h>
 
@@ -24,7 +25,6 @@ unsigned short __attribute((aligned(16))) indices[6] = {
 int main() {
     SetupCallbacks();
 
-    printf("\nInitialising Gu and Input\n");
     Gu::init();
     Input::init();
 
@@ -76,36 +76,6 @@ int main() {
 
     while (gRunning) {
         Input::read();
-
-        // if (Input::ctrlData.Buttons & PSP_CTRL_LEFT) {
-        //     sprite->x -= MOVE_SPEED;
-        // }
-        // if (Input::ctrlData.Buttons & PSP_CTRL_RIGHT) {
-        //     sprite->x += MOVE_SPEED;
-        // }
-        // if (Input::ctrlData.Buttons & PSP_CTRL_UP) {
-        //     sprite->y -= MOVE_SPEED;
-        // }
-        // if (Input::ctrlData.Buttons & PSP_CTRL_DOWN) {
-        //     sprite->y += MOVE_SPEED;
-        // }
-        // if (Input::ctrlData.Buttons & PSP_CTRL_LTRIGGER) {
-        //     sprite->rotation -= M_PI / 180.f * 2;
-        // }
-        // if (Input::ctrlData.Buttons & PSP_CTRL_RTRIGGER) {
-        //     sprite->rotation += M_PI / 180.f * 2;
-        // }
-        // if (Input::getStickX() > 0) {
-        //     sprite->rotation += M_PI / 180.f;
-        // }
-        // if (Input::getStickX() < 0) {
-        //     sprite->rotation -= M_PI / 180.f;
-        // }
-        // if (Input::ctrlData.Buttons & PSP_CTRL_TRIANGLE) {
-        //     PRINT_POS;
-        //     PRINT_SPR_INFO;
-        // }
-
 
         Gu::startFrame();
 
