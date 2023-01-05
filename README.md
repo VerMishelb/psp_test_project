@@ -2,3 +2,5 @@ This is my testing area for PSP homebrew development. May turn into something bi
 Don't expect it to work correctly out of the box, because even I can't guarantee this.
 
 Current idea is to create some kind of a simple 2D game engine.
+
+Weird spacing between functions is introduced in order to fight VS Code not recognising Doxygen comments correctly.

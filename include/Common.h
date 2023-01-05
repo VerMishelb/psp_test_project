@@ -3,6 +3,8 @@
 
 typedef float f32;
 
+/// @param val 
+/// @return The closest power of two >= val
 unsigned int pow2(const unsigned int val) {
     unsigned int powerOfTwo = 1;
     while (powerOfTwo < val) {

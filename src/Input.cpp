@@ -4,6 +4,7 @@
 namespace Input {
     SceCtrlData ctrlData;
     u8 stickDeadZone;
+    
     void init() {
         stickDeadZone = 10;
         sceCtrlSetSamplingCycle(0);
