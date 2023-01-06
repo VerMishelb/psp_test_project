@@ -25,6 +25,8 @@ unsigned short __attribute((aligned(16))) indices[6] = {
 int main() {
     SetupCallbacks();
 
+    DBG_PRINT("Test debug print.\n");
+
     Gu::init();
     Input::init();
 

@@ -16,6 +16,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	pspdisplay
 )
 
+target_compile_options(${PROJECT_NAME} PUBLIC "-fmacro-prefix-map=${CMAKE_SOURCE_DIR}=.")
+
 create_pbp_file(TARGET ${PROJECT_NAME}
 	TITLE "${PROJECT_NAME}" # displayed in XMB
 	ICON_PATH "ICON0.PNG"
